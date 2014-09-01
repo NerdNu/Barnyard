@@ -175,15 +175,6 @@ public class BarnyardPlugin extends JavaPlugin {
                         message(sender, "You must be a player to run this command.");
                     }
                 }
-                if (args[0].equalsIgnoreCase("help")) {
-                    message(sender, ChatColor.UNDERLINE + "Barnyard Commands");
-                    message(sender, "/pet spawn <type>");
-                    message(sender, "/pet remove <type>");
-                    message(sender, "/pet list");
-                    message(sender, "/pet wear [id]");
-                    message(sender, "/pet ride <id>");
-                    message(sender, "/pet stack <id> <id> [id...]");
-                }
                 if (args[0].equalsIgnoreCase("explode")) {
                     if (sender instanceof Player) {
                         Player player = (Player) sender;
@@ -205,7 +196,13 @@ public class BarnyardPlugin extends JavaPlugin {
                     }
                 }
             } else {
-                message(sender, "Unknown command. Type \"/pet help\" for help.");
+                message(sender, ChatColor.UNDERLINE + "Barnyard Commands");
+                message(sender, "/pet spawn <type>");
+                message(sender, "/pet remove <id>");
+                message(sender, "/pet list");
+                message(sender, "/pet wear [id]");
+                message(sender, "/pet ride <id>");
+                message(sender, "/pet stack <id> <id> [id...]");
             }
             return true;
         }
