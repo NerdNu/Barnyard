@@ -103,7 +103,9 @@ public class BarnyardPlugin extends JavaPlugin {
                         Player player = (Player) sender;
                         if (args.length == 1) {
                             Entity passenger = player.getPassenger();
-                            if (passenger != null) {
+                            if (passenger == null) {
+                                message(sender, "Usage: /pet wear [id]");
+                            } else {
                                 passenger.leaveVehicle();
                             }
                         }
