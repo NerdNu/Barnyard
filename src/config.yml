@@ -1,0 +1,13 @@
+maximum-pets: 3
+allowed-types:
+  - BAT
+  - CHICKEN
+  - COW
+  - HORSE
+  - IRON_GOLEM
+  - MUSHROOM_COW
+  - OCELOT
+  - PIG
+  - SHEEP
+  - SQUID
+  - WOLF

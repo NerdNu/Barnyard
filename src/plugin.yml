@@ -1,0 +1,11 @@
+name: Barnyard
+main: com.michaelelin.Barnyard.BarnyardPlugin
+version: ${project.version}
+description: ${project.description}
+website: ${project.url}
+database: true
+authors: [Dumbo52]
+commands:
+  pet:
+    description: Barnyard commands
+    usage: /<command> help
