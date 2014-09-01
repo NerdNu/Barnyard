@@ -87,7 +87,7 @@ public class BarnyardPlugin extends JavaPlugin {
                             } else {
                                 message(sender, "Your pets:");
                                 for (int i = 0; i < pets.size(); i++) {
-                                    message(sender, "  [" + i + "] : " + EntityType.values()[pets.get(i).getType()]);
+                                    message(sender, "  [" + (i + 1) + "] : " + EntityType.values()[pets.get(i).getType()]);
                                 }
                             }
                         } else {
@@ -96,6 +96,7 @@ public class BarnyardPlugin extends JavaPlugin {
                     } else {
                         message(sender, "You must be a player to run this command.");
                     }
+                    return true;
                 }
                 if (args[0].equalsIgnoreCase("wear")) {
                     if (sender instanceof Player) {
@@ -174,6 +175,7 @@ public class BarnyardPlugin extends JavaPlugin {
                     } else {
                         message(sender, "You must be a player to run this command.");
                     }
+                    return true;
                 }
                 if (args[0].equalsIgnoreCase("explode")) {
                     if (sender instanceof Player) {
@@ -194,16 +196,17 @@ public class BarnyardPlugin extends JavaPlugin {
                             }
                         }
                     }
+                    return true;
                 }
-            } else {
-                message(sender, ChatColor.UNDERLINE + "Barnyard Commands");
-                message(sender, "/pet spawn <type>");
-                message(sender, "/pet remove <id>");
-                message(sender, "/pet list");
-                message(sender, "/pet wear [id]");
-                message(sender, "/pet ride <id>");
-                message(sender, "/pet stack <id> <id> [id...]");
             }
+            message(sender, ChatColor.UNDERLINE + "Barnyard Commands");
+            message(sender, "Max pets: " + MAXIMUM_PETS);
+            message(sender, "/pet spawn <type>");
+            message(sender, "/pet remove <id>");
+            message(sender, "/pet list");
+            message(sender, "/pet wear [id]");
+            message(sender, "/pet ride <id>");
+            message(sender, "/pet stack <id> <id> [id...]");
             return true;
         }
         return false;

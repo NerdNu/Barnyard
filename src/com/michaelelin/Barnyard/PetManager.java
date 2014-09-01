@@ -26,7 +26,7 @@ public class PetManager {
     }
     
     public void removePet(Player player, int id) {
-        registry.unregisterPet(registry.getPetsFromPlayer(player).get(id)).remove();
+        registry.unregisterPet(registry.getPetsFromPlayer(player).get(id - 1)).remove();
     }
     
     public List<PetData> listPets(Player player) {
@@ -34,7 +34,7 @@ public class PetManager {
     }
     
     public LivingEntity getPet(Player player, int id) {
-        return registry.getPetFromData(registry.getPetsFromPlayer(player).get(id));
+        return registry.getPetFromData(registry.getPetsFromPlayer(player).get(id - 1));
     }
     
 }
