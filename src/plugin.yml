@@ -5,6 +5,41 @@ description: ${project.description}
 website: ${project.url}
 database: true
 authors: [Dumbo52]
+permissions:
+  barnyard.*:
+    description: Gives access to all Barnyard commands
+    children:
+      barnyard.spawn: true
+      barnyard.remove: true
+      barnyard.list: true
+      barnyard.wear: true
+      barnyard.ride: true
+      barnyard.stack: true
+      barnyard.explode: true
+      barnyard.other.*: true
+  barnyard.spawn:
+    description: Gives access to the /pet spawn command
+  barnyard.remove:
+    description: Gives access to the /pet remove command
+  barnyard.list:
+    description: Gives access to the /pet list command
+  barnyard.wear:
+    description: Gives access to the /pet wear command
+  barnyard.ride:
+    description: Gives access to the /pet ride command
+  barnyard.stack:
+    description: Gives access to the /pet stack command
+  barnyard.explode:
+    description: Gives access to the /pet explode command
+  barnyard.other.*:
+    description: Gives access to all Barnyard mod commands
+    children:
+      barnyard.other.remove: true
+      barnyard.other.list: true
+  barnyard.other.remove:
+    description: Gives access to the /pet remove <player> <id> command
+  barnyard.other.list:
+    description: Gives access to the /pet list <player> command
 commands:
   pet:
     description: Barnyard commands

@@ -2,6 +2,7 @@ package com.michaelelin.Barnyard;
 
 import java.util.List;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -25,11 +26,20 @@ public class PetManager {
         registry.registerPet(player, (LivingEntity) player.getWorld().spawnEntity(player.getLocation(), type));
     }
     
-    public void removePet(Player player, int id) {
-        registry.unregisterPet(registry.getPetsFromPlayer(player).get(id - 1)).remove();
+    public void spawnPet(EntityType type, OfflinePlayer owner, Player player) {
+        registry.registerPet(owner, (LivingEntity) player.getWorld().spawnEntity(player.getLocation(), type));
     }
     
-    public List<PetData> listPets(Player player) {
+    public boolean removePet(OfflinePlayer player, int id) {
+        LivingEntity pet = registry.unregisterPet(registry.getPetsFromPlayer(player).get(id - 1));
+        if (pet != null) {
+            pet.remove();
+            return true;
+        }
+        return false;
+    }
+    
+    public List<PetData> listPets(OfflinePlayer player) {
         return registry.getPetsFromPlayer(player);
     }
     

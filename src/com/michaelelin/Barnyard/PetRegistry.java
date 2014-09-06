@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Chunk;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -27,13 +28,13 @@ public class PetRegistry {
         loadedPets = new HashSet<LivingEntity>();
     }
     
-    public PetData createDataForPet(Player owner, LivingEntity pet) {
+    public PetData createDataForPet(OfflinePlayer owner, LivingEntity pet) {
         PetData data = new PetData();
         data.setOwner(owner.getUniqueId().toString());
         data.setUuid(pet.getUniqueId().toString());
         data.setChunkX(pet.getLocation().getChunk().getX());
         data.setChunkZ(pet.getLocation().getChunk().getZ());
-        data.setWorld(owner.getWorld().getUID().toString());
+        data.setWorld(pet.getWorld().getUID().toString());
         data.setType(pet.getType().ordinal());
         pet.setMetadata("petdata", new FixedMetadataValue(plugin, data));
         return data;
@@ -72,7 +73,7 @@ public class PetRegistry {
         return null;
     }
     
-    public PetData registerPet(Player player, LivingEntity pet) {
+    public PetData registerPet(OfflinePlayer player, LivingEntity pet) {
         PetData data = createDataForPet(player, pet);
         onlinePets.get(player).add(data);
         loadedPets.add(pet);
@@ -92,8 +93,12 @@ public class PetRegistry {
         plugin.getDatabase().save(pet);
     }
     
-    public List<PetData> getPetsFromPlayer(Player player) {
-        return onlinePets.get(player);
+    public List<PetData> getPetsFromPlayer(OfflinePlayer player) {
+        if (player.isOnline()) {
+            return onlinePets.get(player);
+        } else {
+            return plugin.getDatabase().find(PetData.class).where().eq("uuid", player.getUniqueId().toString()).findList();
+        }
     }
     
     public void loadPetsForPlayer(Player player) {
