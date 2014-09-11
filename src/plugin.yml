@@ -4,6 +4,7 @@ version: ${project.version}
 description: ${project.description}
 website: ${project.url}
 database: true
+softdepend: [ProtocolLib]
 authors: [Dumbo52]
 permissions:
   barnyard.*:

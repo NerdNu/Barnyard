@@ -44,7 +44,11 @@ public class PetManager {
     }
     
     public LivingEntity getPet(Player player, int id) {
-        return registry.getPetFromData(registry.getPetsFromPlayer(player).get(id - 1));
+        try {
+            return registry.getPetFromData(registry.getPetsFromPlayer(player).get(id - 1));
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
     }
     
 }

@@ -18,6 +18,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import com.michaelelin.Barnyard.commands.*;
 
 public class BarnyardPlugin extends JavaPlugin {
@@ -28,6 +30,8 @@ public class BarnyardPlugin extends JavaPlugin {
     public List<EntityType> ALLOWED_TYPES;
     
     public PetManager manager;
+    
+    public ProtocolManager protocolManager;
     
     private Map<String, BarnyardCommand> commands;
 
@@ -74,6 +78,11 @@ public class BarnyardPlugin extends JavaPlugin {
         }
         getServer().getPluginManager().registerEvents(new BarnyardListener(this), this);
         this.manager = new PetManager(this);
+        try {
+            protocolManager = ProtocolLibrary.getProtocolManager();
+        } catch (Exception e) {
+            log.warning("[Barnyard] ProtocolLib could not be loaded.");
+        }
         setupDatabase();
         commands = new HashMap<String, BarnyardCommand>();
         commands.put("spawn", new SpawnCommand(this));
