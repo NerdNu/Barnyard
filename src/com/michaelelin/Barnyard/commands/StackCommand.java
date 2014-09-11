@@ -29,7 +29,7 @@ public class StackCommand extends BarnyardCommand {
                     }
                     
                 } catch (NumberFormatException e) {
-                    plugin.message(sender, "You don't have a pet with ID '" + args[1] + "'.");
+                    plugin.message(sender, "You don't have a pet with ID '" + args[i] + "'.");
                     return true;
                 }
             }

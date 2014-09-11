@@ -48,6 +48,7 @@ public class BarnyardPlugin extends JavaPlugin {
                 message(sender, "/pet wear [id]");
                 message(sender, "/pet ride <id>");
                 message(sender, "/pet stack <id> <id> [id...]");
+                message(sender, "/pet name <id> [name]");
             }
             return true;
         }
@@ -81,6 +82,7 @@ public class BarnyardPlugin extends JavaPlugin {
         commands.put("wear", new WearCommand(this));
         commands.put("ride", new RideCommand(this));
         commands.put("stack", new StackCommand(this));
+        commands.put("name", new NameCommand(this));
         commands.put("explode", new ExplodeCommand(this));
         for (Player player : getServer().getOnlinePlayers()) {
             manager.registry.loadPetsForPlayer(player);

@@ -15,6 +15,7 @@ permissions:
       barnyard.wear: true
       barnyard.ride: true
       barnyard.stack: true
+      barnyard.name: true
       barnyard.explode: true
       barnyard.other.*: true
   barnyard.spawn:
@@ -29,6 +30,8 @@ permissions:
     description: Gives access to the /pet ride command
   barnyard.stack:
     description: Gives access to the /pet stack command
+  barnyard.name:
+    description: Gives access to the /pet name command
   barnyard.explode:
     description: Gives access to the /pet explode command
   barnyard.other.*:

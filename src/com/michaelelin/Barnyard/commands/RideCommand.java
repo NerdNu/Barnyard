@@ -31,7 +31,7 @@ public class RideCommand extends BarnyardCommand {
                 pet.eject();
                 pet.setPassenger(player);
             } catch (NumberFormatException e) {
-                plugin.message(sender, "You don't have a pet with ID '" + args[1] + "'.");
+                plugin.message(sender, "You don't have a pet with ID '" + args[0] + "'.");
             }
         } else {
             plugin.message(sender, "You must be a player to run this command.");
