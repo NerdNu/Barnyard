@@ -21,7 +21,7 @@ public class NameCommand extends BarnyardCommand {
                 Player player = (Player) sender;
                 try {
                     int id = Integer.parseInt(args[0]);
-                    LivingEntity pet = plugin.manager.getPet(player, id);
+                    LivingEntity pet = plugin.manager.getPet(player, id - 1);
                     if (pet == null) {
                         plugin.message(sender, "You don't have a pet with ID '" + args[0] + "'.");
                         return true;
@@ -41,7 +41,7 @@ public class NameCommand extends BarnyardCommand {
                 Player player = (Player) sender;
                 try {
                     int id = Integer.parseInt(args[0]);
-                    LivingEntity pet = plugin.manager.getPet(player, id);
+                    LivingEntity pet = plugin.manager.getPet(player, id - 1);
                     if (pet == null) {
                         plugin.message(sender, "You don't have a pet with ID '" + args[0] + "'.");
                         return true;

@@ -49,10 +49,11 @@ public class PetRegistry {
                 }
             }
         }
-        return plugin.getDatabase().find(PetData.class).where().eq("uuid", pet.getUniqueId().toString()).findUnique();
+        return plugin.getDatabase().find(PetData.class).where().eq("uuid", pet.getUniqueId().toString()).query().findUnique();
     }
     
     public LivingEntity getPetFromData(PetData data) {
+        if (data == null) return null;
         for (LivingEntity entity : loadedPets) {
             if (!entity.isDead() && data.getUuid().toString().equals(entity.getUniqueId().toString())) {
                 return entity;
@@ -65,7 +66,7 @@ public class PetRegistry {
                 return (LivingEntity) entity;
             }
         }
-        plugin.getDatabase().delete(plugin.getDatabase().find(PetData.class).where().eq("uuid", data.getUuid()).findUnique());
+        plugin.getDatabase().delete(plugin.getDatabase().find(PetData.class).where().eq("uuid", data.getUuid()).query().findUnique());
         Player player = plugin.getServer().getPlayer(UUID.fromString(data.getOwner()));
         if (onlinePets.containsKey(player)) {
             onlinePets.get(player).remove(data);
@@ -75,14 +76,20 @@ public class PetRegistry {
     
     public PetData registerPet(OfflinePlayer player, LivingEntity pet) {
         PetData data = createDataForPet(player, pet);
-        onlinePets.get(player).add(data);
+        if (player.isOnline()) {
+            onlinePets.get(player).add(data);
+        }
         loadedPets.add(pet);
         plugin.getDatabase().save(data);
         return data;
     }
     
     public LivingEntity unregisterPet(PetData pet) {
-        onlinePets.get(plugin.getServer().getPlayer(UUID.fromString(pet.getOwner()))).remove(pet);
+        if (pet == null) return null;
+        Player owner = plugin.getServer().getPlayer(UUID.fromString(pet.getOwner()));
+        if (owner!= null) {
+            onlinePets.get(owner).remove(pet);
+        }
         LivingEntity entity = getPetFromData(pet);
         loadedPets.remove(entity);
         plugin.getDatabase().delete(pet);
@@ -91,13 +98,25 @@ public class PetRegistry {
     
     public void updatePet(PetData pet) {
         plugin.getDatabase().save(pet);
+        Player owner = plugin.getServer().getPlayer(UUID.fromString(pet.getOwner()));
+        if (owner != null) {
+            List<PetData> pets = onlinePets.get(owner);
+            if (!pets.contains(pet)) {
+                for (int i = 0; i < pets.size(); i++) {
+                    if (pets.get(i).getUuid().equals(pet.getUuid())) {
+                        pets.set(i, pet);
+                        break;
+                    }
+                }
+            }
+        }
     }
     
     public List<PetData> getPetsFromPlayer(OfflinePlayer player) {
         if (player.isOnline()) {
             return onlinePets.get(player);
         } else {
-            return plugin.getDatabase().find(PetData.class).where().eq("uuid", player.getUniqueId().toString()).findList();
+            return plugin.getDatabase().find(PetData.class).where().eq("owner", player.getUniqueId().toString()).query().findList();
         }
     }
     
@@ -113,9 +132,7 @@ public class PetRegistry {
         List<PetData> pets = plugin.getDatabase().find(PetData.class).where().eq("world", chunk.getWorld().getUID().toString()).eq("chunkX", chunk.getX()).eq("chunkZ", chunk.getZ()).query().findList();
         for (PetData pet : pets) {
             LivingEntity entity = getPetFromData(pet);
-            if (entity == null) {
-                plugin.getDatabase().delete(pet);
-            } else {
+            if (entity != null && !loadedPets.contains(entity)) {
                 entity.setMetadata("petdata", new FixedMetadataValue(plugin, pet));
                 loadedPets.add(getPetFromData(pet));
             }

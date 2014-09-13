@@ -22,7 +22,7 @@ public class StackCommand extends BarnyardCommand {
             for (int i = 0; i < args.length; i++) {
                 try {
                     int id = Integer.parseInt(args[i]);
-                    stack[i] = plugin.manager.getPet(player, id);
+                    stack[i] = plugin.manager.getPet(player, id - 1);
                     if (stack[i] == null) {
                         plugin.message(sender, "You don't have a pet with ID '" + args[i] + "'.");
                         return true;

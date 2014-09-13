@@ -4,8 +4,6 @@ package com.michaelelin.Barnyard.commands;
 
 import java.lang.reflect.InvocationTargetException;
 
-import net.minecraft.server.v1_7_R3.WorldServer;
-
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -30,7 +28,7 @@ public class ExplodeCommand extends BarnyardCommand {
             Player player = (Player) sender;
             try {
                 int id = Integer.parseInt(args[0]);
-                LivingEntity pet = plugin.manager.getPet(player, id);
+                LivingEntity pet = plugin.manager.getPet(player, id - 1);
                 if (pet == null) {
                     plugin.message(sender, "You don't have a pet with ID '" + args[0] + "'.");
                     return true;
@@ -83,7 +81,7 @@ public class ExplodeCommand extends BarnyardCommand {
                         }
                     }
                 }
-                plugin.manager.removePet(player, id);
+                plugin.manager.removePet(player, id - 1);
             } catch (NumberFormatException e) {
                 plugin.message(sender, "You don't have a pet with ID '" + args[0] + "'.");
             }

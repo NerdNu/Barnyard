@@ -31,7 +31,7 @@ public class PetManager {
     }
     
     public boolean removePet(OfflinePlayer player, int id) {
-        LivingEntity pet = registry.unregisterPet(registry.getPetsFromPlayer(player).get(id - 1));
+        LivingEntity pet = registry.unregisterPet(getPetData(player, id));
         if (pet != null) {
             pet.remove();
             return true;
@@ -43,12 +43,13 @@ public class PetManager {
         return registry.getPetsFromPlayer(player);
     }
     
-    public LivingEntity getPet(Player player, int id) {
-        try {
-            return registry.getPetFromData(registry.getPetsFromPlayer(player).get(id - 1));
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return null;
-        }
+    public LivingEntity getPet(OfflinePlayer player, int id) {
+        return registry.getPetFromData(getPetData(player, id));
+    }
+    
+    public PetData getPetData(OfflinePlayer player, int id) {
+        List<PetData> pets = listPets(player);
+        return id >= 0 && id < pets.size() ? pets.get(id) : null;
     }
     
 }
