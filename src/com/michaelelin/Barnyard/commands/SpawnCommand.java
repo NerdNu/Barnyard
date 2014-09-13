@@ -18,15 +18,19 @@ public class SpawnCommand extends BarnyardCommand {
         if (!checkPermission(sender, "barnyard.spawn")) return true;
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            try {
-                EntityType type = EntityType.valueOf(args[0].toUpperCase());
-                if (plugin.ALLOWED_TYPES.contains(type)) {
-                    plugin.manager.spawnPet(type, player);
-                } else {
+            if (plugin.manager.canSpawnPet(player)) {
+                try {
+                    EntityType type = EntityType.valueOf(args[0].toUpperCase());
+                    if (plugin.ALLOWED_TYPES.contains(type)) {
+                        plugin.manager.spawnPet(type, player);
+                    } else {
+                        plugin.message(sender, "Allowed types: " + plugin.ALLOWED_TYPES.toString());
+                    }
+                } catch (IllegalArgumentException e) {
                     plugin.message(sender, "Allowed types: " + plugin.ALLOWED_TYPES.toString());
                 }
-            } catch (IllegalArgumentException e) {
-                plugin.message(sender, "Allowed types: " + plugin.ALLOWED_TYPES.toString());
+            } else {
+                plugin.message(sender, "You can't spawn any more pets.");
             }
         } else {
             plugin.message(sender, "You must be a player to run this command.");
