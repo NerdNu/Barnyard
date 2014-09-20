@@ -54,6 +54,7 @@ public class BarnyardListener implements Listener {
                 }
             } else {
                 plugin.message(event.getPlayer(), "This pet belongs to " + plugin.getServer().getOfflinePlayer(UUID.fromString(plugin.manager.registry.getDataFromPet((LivingEntity) entity).getOwner())).getName());
+                event.setCancelled(true);
             }
         }
     }
