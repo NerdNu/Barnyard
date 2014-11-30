@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.utility.MinecraftReflection;
 import com.michaelelin.Barnyard.BarnyardPlugin;
 
 public class ExplodeCommand extends BarnyardCommand {
@@ -35,40 +36,47 @@ public class ExplodeCommand extends BarnyardCommand {
                 }
                 pet.getWorld().playSound(pet.getEyeLocation(), Sound.EXPLODE, 1, 1);
                 float health = (float) pet.getMaxHealth();
+                Class<Enum> particleEnum = (Class<Enum>) MinecraftReflection.getMinecraftClass("EnumParticle");
                 PacketContainer[] packets = new PacketContainer[3];
                 packets[0] = plugin.protocolManager.createPacket(PacketType.Play.Server.WORLD_PARTICLES);
-                packets[0].getStrings().write(0, "largeexplode");
+                packets[0].getSpecificModifier(particleEnum).write(0, Enum.valueOf(particleEnum, "EXPLOSION_LARGE"));
+                packets[0].getBooleans().write(0, false);
                 packets[0].getFloat().
                     write(0, (float) pet.getLocation().getX()).
-                    write(1, (float) pet.getLocation().getY()).
+                    write(1, (float) pet.getEyeLocation().getY()).
                     write(2, (float) pet.getLocation().getZ()).
                     write(3, 1.0F).
                     write(4, 2.0F).
                     write(5, 1.0F).
                     write(6, 0.0F);
-                packets[0].getIntegers().write(0, 10);
+                packets[0].getIntegers().write(0, 4);
+                packets[0].getIntegerArrays().write(0, new int[0]);
                 packets[1] = plugin.protocolManager.createPacket(PacketType.Play.Server.WORLD_PARTICLES);
-                packets[1].getStrings().write(0, "blockcrack_152_0");
+                packets[1].getSpecificModifier(particleEnum).write(0, Enum.valueOf(particleEnum, "BLOCK_DUST"));
+                packets[1].getBooleans().write(0, false);
                 packets[1].getFloat().
                     write(0, (float) pet.getLocation().getX()).
-                    write(1, (float) pet.getLocation().getY()).
+                    write(1, (float) pet.getEyeLocation().getY()).
                     write(2, (float) pet.getLocation().getZ()).
-                    write(3, health * 0.10F).
-                    write(4, health * 0.04F).
-                    write(5, health * 0.10F).
-                    write(6, 0.0F);
-                packets[1].getIntegers().write(0, 100);
+                    write(3, 0.20F).
+                    write(4, 0.08F).
+                    write(5, 0.20F).
+                    write(6, 0.30F);
+                packets[1].getIntegers().write(0, 250);
+                packets[1].getIntegerArrays().write(0, new int[]{152, 0});
                 packets[2] = plugin.protocolManager.createPacket(PacketType.Play.Server.WORLD_PARTICLES);
-                packets[2].getStrings().write(0, "blockcrack_35_6");
+                packets[2].getSpecificModifier(particleEnum).write(0, Enum.valueOf(particleEnum, "ITEM_CRACK"));
+                packets[2].getBooleans().write(0, false);
                 packets[2].getFloat().
                     write(0, (float) pet.getLocation().getX()).
-                    write(1, (float) pet.getLocation().getY()).
+                    write(1, (float) pet.getEyeLocation().getY()).
                     write(2, (float) pet.getLocation().getZ()).
-                    write(3, health * 0.08F).
-                    write(4, health * 0.06F).
-                    write(5, health * 0.08F).
-                    write(6, 0.0F);
-                packets[2].getIntegers().write(0, 100);
+                    write(3, 0.16F).
+                    write(4, 0.12F).
+                    write(5, 0.16F).
+                    write(6, 0.20F);
+                packets[2].getIntegers().write(0, 200);
+                packets[2].getIntegerArrays().write(0, new int[]{319, 0});
                 for (Entity entity : pet.getNearbyEntities(64, 64, 64)) {
                     if (entity instanceof Player) {
                         Player witness = (Player) entity;
