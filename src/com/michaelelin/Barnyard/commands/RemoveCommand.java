@@ -21,7 +21,9 @@ public class RemoveCommand extends BarnyardCommand {
                 Player player = (Player) sender;
                 try {
                     int id = Integer.parseInt(args[0]);
-                    if (!plugin.manager.removePet(player, id - 1)) {
+                    if (plugin.manager.removePet(player, id - 1)) {
+                        plugin.message(sender, "Pet removed.");
+                    } else {
                         plugin.message(sender, "You don't have a pet with ID '" + args[0] + "'.");
                     }
                 } catch (NumberFormatException e) {
@@ -39,7 +41,9 @@ public class RemoveCommand extends BarnyardCommand {
             }
             try {
                 int id = Integer.parseInt(args[1]);
-                if (!plugin.manager.removePet(player, id - 1)) {
+                if (plugin.manager.removePet(player, id - 1)) {
+                    plugin.message(sender, "Pet removed.");
+                } else {
                     plugin.message(sender, "That player doesn't have a pet with ID '" + args[0] + "'.");
                 }
             } catch (NumberFormatException e) {
