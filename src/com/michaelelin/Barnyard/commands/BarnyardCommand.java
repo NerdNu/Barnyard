@@ -16,7 +16,7 @@ public abstract class BarnyardCommand {
         this.minArgs = minArgs;
         this.maxArgs = maxArgs;
     }
-    
+
     public BarnyardCommand(BarnyardPlugin plugin, int argCount) {
         this.plugin = plugin;
         this.minArgs = argCount;
@@ -24,7 +24,7 @@ public abstract class BarnyardCommand {
     }
     
     public boolean checkArgs(String[] args) {
-        return args.length >= minArgs && args.length <= maxArgs;
+        return args.length >= minArgs && (maxArgs < 0 || args.length <= maxArgs);
     }
     
     public boolean checkPermission(CommandSender sender, String permission) {

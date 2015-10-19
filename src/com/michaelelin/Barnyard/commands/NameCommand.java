@@ -9,7 +9,7 @@ import com.michaelelin.Barnyard.BarnyardPlugin;
 public class NameCommand extends BarnyardCommand {
     
     public NameCommand(BarnyardPlugin plugin) {
-        super(plugin, 1, 2);
+        super(plugin, 1, -1);
     }
 
     @Override
