@@ -35,7 +35,7 @@ public class NameCommand extends BarnyardCommand {
                 plugin.message(sender, "You must be a player to run this command.");
             }
         }
-        else if (args.length == 2) {
+        else if (args.length >= 2) {
             if (!checkPermission(sender, "barnyard.name")) return true;
             if (sender instanceof Player) {
                 Player player = (Player) sender;
@@ -46,7 +46,18 @@ public class NameCommand extends BarnyardCommand {
                         plugin.message(sender, "You don't have a pet with ID '" + args[0] + "'.");
                         return true;
                     }
-                    pet.setCustomName(args[1]);
+                    String newName = args[1];
+                    
+                    if (args.length > 2) {
+                        StringBuilder sb = new StringBuilder();
+                        // Join our list of args with spaces
+                        for (int i = 1; i < args.length; i++) {
+                            sb.append(args[i]);
+                            sb.append(" ");
+                        }
+                        newName = sb.toString();
+                    }
+                    pet.setCustomName(newName);
                     pet.setCustomNameVisible(true);
                 } catch (NumberFormatException e) {
                     plugin.message(sender, "You don't have a pet with ID '" + args[0] + "'.");
