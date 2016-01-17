@@ -15,13 +15,13 @@ public class SpawnCommand extends BarnyardCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args) {
         if (!checkArgs(args)) return false;
-        if (!checkPermission(sender, "barnyard.spawn")) return true;
+        if (!checkPermission(sender, "barnyard.spawn") && !checkPermission(sender, "barnyard.spawnany")) return true;
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (plugin.manager.canSpawnPet(player)) {
                 try {
                     EntityType type = EntityType.valueOf(args[0].toUpperCase());
-                    if (plugin.ALLOWED_TYPES.contains(type)) {
+                    if (plugin.ALLOWED_TYPES.contains(type) || checkPermission(sender, "barnyard.spawnany")) {
                         plugin.manager.spawnPet(type, player);
                     } else {
                         plugin.message(sender, "Allowed types: " + plugin.ALLOWED_TYPES.toString());

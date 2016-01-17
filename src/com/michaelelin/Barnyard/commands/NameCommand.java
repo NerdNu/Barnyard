@@ -49,11 +49,11 @@ public class NameCommand extends BarnyardCommand {
                     String newName = args[1];
                     
                     if (args.length > 2) {
-                        StringBuilder sb = new StringBuilder();
+                        StringBuilder sb = new StringBuilder(newName);
                         // Join our list of args with spaces
-                        for (int i = 1; i < args.length; i++) {
-                            sb.append(args[i]);
+                        for (int i = 2; i < args.length; i++) {
                             sb.append(" ");
+                            sb.append(args[i]);
                         }
                         newName = sb.toString();
                     }

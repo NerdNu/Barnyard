@@ -21,6 +21,8 @@ permissions:
       barnyard.other.*: true
   barnyard.spawn:
     description: Gives access to the /pet spawn command
+  barnyard.spawnany:
+    description: Gives access to spawn anything
   barnyard.remove:
     description: Gives access to the /pet remove command
   barnyard.list:
