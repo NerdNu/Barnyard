@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import org.bukkit.Chunk;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -16,18 +17,18 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
 public class PetRegistry {
-    
+
     private BarnyardPlugin plugin;
-    
+
     private Map<Player, List<PetData>> onlinePets;
     private Set<LivingEntity> loadedPets;
-    
+
     public PetRegistry(BarnyardPlugin plugin) {
         this.plugin = plugin;
         onlinePets = new HashMap<Player, List<PetData>>();
         loadedPets = new HashSet<LivingEntity>();
     }
-    
+
     public PetData createDataForPet(OfflinePlayer owner, LivingEntity pet) {
         PetData data = new PetData();
         data.setOwner(owner.getUniqueId().toString());
@@ -39,7 +40,7 @@ public class PetRegistry {
         pet.setMetadata("petdata", new FixedMetadataValue(plugin, data));
         return data;
     }
-    
+
     public PetData getDataFromPet(LivingEntity pet) {
         if (pet.hasMetadata("petdata")) {
             List<MetadataValue> meta = pet.getMetadata("petdata");
@@ -51,7 +52,7 @@ public class PetRegistry {
         }
         return plugin.getDatabase().find(PetData.class).where().eq("uuid", pet.getUniqueId().toString()).query().findUnique();
     }
-    
+
     public LivingEntity getPetFromData(PetData data) {
         if (data == null) return null;
         for (LivingEntity entity : loadedPets) {
@@ -59,11 +60,14 @@ public class PetRegistry {
                 return entity;
             }
         }
-        Chunk chunk = plugin.getServer().getWorld(UUID.fromString(data.getWorld())).getChunkAt(data.getChunkX(), data.getChunkZ());
-        Entity[] entities = chunk.getEntities();
-        for (Entity entity : entities) {
-            if (entity instanceof LivingEntity && data.getUuid().equals(entity.getUniqueId().toString())) {
-                return (LivingEntity) entity;
+        World world = plugin.getServer().getWorld(UUID.fromString(data.getWorld()));
+        if (world != null) {
+            Chunk chunk = world.getChunkAt(data.getChunkX(), data.getChunkZ());
+            Entity[] entities = chunk.getEntities();
+            for (Entity entity : entities) {
+                if (entity instanceof LivingEntity && data.getUuid().equals(entity.getUniqueId().toString())) {
+                    return (LivingEntity) entity;
+                }
             }
         }
         plugin.getDatabase().delete(plugin.getDatabase().find(PetData.class).where().eq("uuid", data.getUuid()).query().findUnique());
@@ -73,7 +77,7 @@ public class PetRegistry {
         }
         return null;
     }
-    
+
     public PetData registerPet(OfflinePlayer player, LivingEntity pet) {
         PetData data = createDataForPet(player, pet);
         if (player.isOnline()) {
@@ -83,7 +87,7 @@ public class PetRegistry {
         plugin.getDatabase().save(data);
         return data;
     }
-    
+
     public LivingEntity unregisterPet(PetData pet) {
         if (pet == null) return null;
         Player owner = plugin.getServer().getPlayer(UUID.fromString(pet.getOwner()));
@@ -95,7 +99,7 @@ public class PetRegistry {
         plugin.getDatabase().delete(pet);
         return entity;
     }
-    
+
     public void updatePet(PetData pet) {
         plugin.getDatabase().save(pet);
         Player owner = plugin.getServer().getPlayer(UUID.fromString(pet.getOwner()));
@@ -111,7 +115,7 @@ public class PetRegistry {
             }
         }
     }
-    
+
     public List<PetData> getPetsFromPlayer(OfflinePlayer player) {
         if (player.isOnline()) {
             return onlinePets.get(player);
@@ -119,15 +123,15 @@ public class PetRegistry {
             return plugin.getDatabase().find(PetData.class).where().eq("owner", player.getUniqueId().toString()).query().findList();
         }
     }
-    
+
     public void loadPetsForPlayer(Player player) {
         onlinePets.put(player, plugin.getDatabase().find(PetData.class).where().eq("owner", player.getUniqueId().toString()).query().findList());
     }
-    
+
     public void unloadPetsForPlayer(Player player) {
         onlinePets.remove(player);
     }
-    
+
     public void loadChunk(Chunk chunk) {
         List<PetData> pets = plugin.getDatabase().find(PetData.class).where().eq("world", chunk.getWorld().getUID().toString()).eq("chunkX", chunk.getX()).eq("chunkZ", chunk.getZ()).query().findList();
         for (PetData pet : pets) {
@@ -138,7 +142,7 @@ public class PetRegistry {
             }
         }
     }
-    
+
     public void unloadChunk(Chunk chunk) {
         for (Entity entity : chunk.getEntities()) {
             if (entity instanceof LivingEntity && hasPet(entity)) {
@@ -153,9 +157,9 @@ public class PetRegistry {
             }
         }
     }
-    
+
     public boolean hasPet(Entity pet) {
         return pet.hasMetadata("petdata");
     }
-    
+
 }
