@@ -2,8 +2,14 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.michaelelin</groupId>
   <artifactId>Barnyard</artifactId>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
+  <description>Manages summonable pets.</description>
+  <url>https://github.com/Dumbo52/Barnyard</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
   <build>
+    <defaultGoal>package</defaultGoal>
     <sourceDirectory>src</sourceDirectory>
     <resources>
       <resource>
