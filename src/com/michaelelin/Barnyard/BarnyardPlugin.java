@@ -25,14 +25,14 @@ import com.michaelelin.Barnyard.commands.*;
 public class BarnyardPlugin extends JavaPlugin {
 
     public static final Logger log = Logger.getLogger("Minecraft");
-    
+
     public int MAXIMUM_PETS;
     public List<EntityType> ALLOWED_TYPES;
-    
+
     public PetManager manager;
-    
+
     public ProtocolManager protocolManager;
-    
+
     private Map<String, BarnyardCommand> commands;
 
     @Override
@@ -53,6 +53,7 @@ public class BarnyardPlugin extends JavaPlugin {
                 message(sender, "/pet ride <id>");
                 message(sender, "/pet stack <id> <id> [id...]");
                 message(sender, "/pet name <id> [name]");
+                message(sender, "/pet explode <id>");
             }
             return true;
         }
