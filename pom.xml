@@ -2,8 +2,14 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.michaelelin</groupId>
   <artifactId>Barnyard</artifactId>
-  <version>0.1.1</version>
+  <version>0.1.3</version>
+  <description>Manages summonable pets.</description>
+  <url>https://github.com/Dumbo52/Barnyard</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
   <build>
+    <defaultGoal>clean package</defaultGoal>
     <sourceDirectory>src</sourceDirectory>
     <resources>
       <resource>
@@ -28,16 +34,16 @@
     </plugins>
   </build>
   <dependencies>
-  	<dependency>
-  		<groupId>org.bukkit</groupId>
-  		<artifactId>bukkit</artifactId>
-  		<version>1.7.9-R0.2</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>com.comphenix.protocol</groupId>
-  		<artifactId>ProtocolLib</artifactId>
-  		<version>3.4.0</version>
-  	</dependency>
+    <dependency>
+      <groupId>org.spigotmc</groupId>
+      <artifactId>spigot-api</artifactId>
+      <version>1.9-R0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.comphenix.protocol</groupId>
+      <artifactId>ProtocolLib</artifactId>
+      <version>3.4.0</version>
+    </dependency>
   </dependencies>
   <repositories>
     <repository>
