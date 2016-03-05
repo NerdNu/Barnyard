@@ -16,7 +16,7 @@ import com.comphenix.protocol.utility.MinecraftReflection;
 import com.michaelelin.Barnyard.BarnyardPlugin;
 
 public class ExplodeCommand extends BarnyardCommand {
-    
+
     public ExplodeCommand(BarnyardPlugin plugin) {
         super(plugin, 1);
     }
@@ -34,7 +34,7 @@ public class ExplodeCommand extends BarnyardCommand {
                     plugin.message(sender, "You don't have a pet with ID '" + args[0] + "'.");
                     return true;
                 }
-                pet.getWorld().playSound(pet.getEyeLocation(), Sound.EXPLODE, 1, 1);
+                pet.getWorld().playSound(pet.getEyeLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
                 float health = (float) pet.getMaxHealth();
                 Class<Enum> particleEnum = (Class<Enum>) MinecraftReflection.getMinecraftClass("EnumParticle");
                 PacketContainer[] packets = new PacketContainer[3];
@@ -107,5 +107,5 @@ public class ExplodeCommand extends BarnyardCommand {
     public String getDefaultUsage() {
         return "<id>";
     }
-    
+
 }
