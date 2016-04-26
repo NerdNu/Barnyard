@@ -70,7 +70,10 @@ public class PetRegistry {
                 }
             }
         }
-        plugin.getDatabase().delete(plugin.getDatabase().find(PetData.class).where().eq("uuid", data.getUuid()).query().findUnique());
+        PetData petToDelete = plugin.getDatabase().find(PetData.class).where().eq("uuid", data.getUuid()).query().findUnique();
+        if (petToDelete != null) {
+            plugin.getDatabase().delete(petToDelete);
+        }
         Player player = plugin.getServer().getPlayer(UUID.fromString(data.getOwner()));
         if (onlinePets.containsKey(player)) {
             onlinePets.get(player).remove(data);
