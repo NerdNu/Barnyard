@@ -22,7 +22,7 @@ Commands
  * `/pet name <id> [<name>]` - Assign a name to the pet with the specified
    ID, or clear its name if no name is given.
  * `/pet explode <id>` - Remove the specified pet with an explosion.
-
+ * `/pet explode self` - Special Id to explode oneself
 
 Configuration
 -------------

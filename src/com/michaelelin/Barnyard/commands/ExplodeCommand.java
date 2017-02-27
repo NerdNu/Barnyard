@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
@@ -28,23 +29,29 @@ public class ExplodeCommand extends BarnyardCommand {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             try {
-                int id = Integer.parseInt(args[0]);
-                LivingEntity pet = plugin.manager.getPet(player, id - 1);
-                if (pet == null) {
-                    plugin.message(sender, "You don't have a pet with ID '" + args[0] + "'.");
-                    return true;
+                LivingEntity victim;
+                int id = -1;
+                if (args[0].equalsIgnoreCase("self")) {
+                    victim = player;
+                } else {
+                    id = Integer.parseInt(args[0]);
+                    victim = plugin.manager.getPet(player, id - 1);
+                    if (victim == null) {
+                        plugin.message(sender, "You don't have a pet with ID '" + args[0] + "'.");
+                        return true;
+                    }
                 }
-                pet.getWorld().playSound(pet.getEyeLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
-                float health = (float) pet.getMaxHealth();
+                victim.getWorld().playSound(victim.getEyeLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
+                float health = (float) victim.getMaxHealth();
                 Class<Enum> particleEnum = (Class<Enum>) MinecraftReflection.getMinecraftClass("EnumParticle");
                 PacketContainer[] packets = new PacketContainer[3];
                 packets[0] = plugin.protocolManager.createPacket(PacketType.Play.Server.WORLD_PARTICLES);
                 packets[0].getSpecificModifier(particleEnum).write(0, Enum.valueOf(particleEnum, "EXPLOSION_LARGE"));
                 packets[0].getBooleans().write(0, false);
                 packets[0].getFloat().
-                    write(0, (float) pet.getLocation().getX()).
-                    write(1, (float) pet.getEyeLocation().getY()).
-                    write(2, (float) pet.getLocation().getZ()).
+                    write(0, (float) victim.getLocation().getX()).
+                    write(1, (float) victim.getEyeLocation().getY()).
+                    write(2, (float) victim.getLocation().getZ()).
                     write(3, 1.0F).
                     write(4, 2.0F).
                     write(5, 1.0F).
@@ -55,9 +62,9 @@ public class ExplodeCommand extends BarnyardCommand {
                 packets[1].getSpecificModifier(particleEnum).write(0, Enum.valueOf(particleEnum, "BLOCK_DUST"));
                 packets[1].getBooleans().write(0, false);
                 packets[1].getFloat().
-                    write(0, (float) pet.getLocation().getX()).
-                    write(1, (float) pet.getEyeLocation().getY()).
-                    write(2, (float) pet.getLocation().getZ()).
+                    write(0, (float) victim.getLocation().getX()).
+                    write(1, (float) victim.getEyeLocation().getY()).
+                    write(2, (float) victim.getLocation().getZ()).
                     write(3, 0.20F).
                     write(4, 0.08F).
                     write(5, 0.20F).
@@ -68,16 +75,16 @@ public class ExplodeCommand extends BarnyardCommand {
                 packets[2].getSpecificModifier(particleEnum).write(0, Enum.valueOf(particleEnum, "ITEM_CRACK"));
                 packets[2].getBooleans().write(0, false);
                 packets[2].getFloat().
-                    write(0, (float) pet.getLocation().getX()).
-                    write(1, (float) pet.getEyeLocation().getY()).
-                    write(2, (float) pet.getLocation().getZ()).
+                    write(0, (float) victim.getLocation().getX()).
+                    write(1, (float) victim.getEyeLocation().getY()).
+                    write(2, (float) victim.getLocation().getZ()).
                     write(3, 0.16F).
                     write(4, 0.12F).
                     write(5, 0.16F).
                     write(6, 0.20F);
                 packets[2].getIntegers().write(0, 200);
                 packets[2].getIntegerArrays().write(0, new int[]{319, 0});
-                for (Entity entity : pet.getNearbyEntities(64, 64, 64)) {
+                for (Entity entity : victim.getNearbyEntities(64, 64, 64)) {
                     if (entity instanceof Player) {
                         Player witness = (Player) entity;
                         try {
@@ -89,7 +96,12 @@ public class ExplodeCommand extends BarnyardCommand {
                         }
                     }
                 }
-                plugin.manager.removePet(player, id - 1);
+                if (victim == player){
+                    victim.setLastDamageCause(new EntityDamageEvent(victim, EntityDamageEvent.DamageCause.CUSTOM, victim.getHealth()));
+                    victim.setHealth(0);
+                } else {
+                    plugin.manager.removePet(player, id - 1);
+                }
             } catch (NumberFormatException e) {
                 plugin.message(sender, "You don't have a pet with ID '" + args[0] + "'.");
             }
