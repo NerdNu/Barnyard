@@ -99,6 +99,13 @@ public class ExplodeCommand extends BarnyardCommand {
                 if (victim == player){
                     victim.setLastDamageCause(new EntityDamageEvent(victim, EntityDamageEvent.DamageCause.CUSTOM, victim.getHealth()));
                     victim.setHealth(0);
+                    try {
+                        plugin.protocolManager.sendServerPacket(player, packets[0]);
+                        plugin.protocolManager.sendServerPacket(player, packets[1]);
+                        plugin.protocolManager.sendServerPacket(player, packets[2]);
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     plugin.manager.removePet(player, id - 1);
                 }
