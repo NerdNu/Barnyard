@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.michaelelin</groupId>
   <artifactId>Barnyard</artifactId>
-  <version>0.1.6</version>
+  <version>0.2.0</version>
   <description>Manages summonable pets.</description>
   <url>https://github.com/Dumbo52/Barnyard</url>
   <properties>
@@ -31,20 +31,46 @@
           <target>1.7</target>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.4.3</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <relocations>
+                <relocation>
+                  <pattern>nu.nerd.BukkitEbean</pattern>
+                  <shadedPattern>com.michaelelin.Barnyard.BukkitEbean</shadedPattern>
+                </relocation>
+              </relocations>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <dependencies>
     <dependency>
-           <groupId>org.spigotmc</groupId>
-           <artifactId>spigot-api</artifactId>
-           <version>1.11.2-R0.1-SNAPSHOT</version>
-           <scope>provided</scope>
+      <groupId>org.spigotmc</groupId>
+      <artifactId>spigot-api</artifactId>
+      <version>1.12-R0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>nu.nerd</groupId>
+      <artifactId>BukkitEbean</artifactId>
+      <version>1.0.0</version>
     </dependency>
   </dependencies>
   <repositories>
     <repository>
-        <id>spigot-repo</id>
-        <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+      <id>spigot-repo</id>
+      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
     </repository>
   </repositories>
 </project>

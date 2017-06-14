@@ -9,6 +9,9 @@ import java.util.logging.Logger;
 
 import javax.persistence.PersistenceException;
 
+import com.avaje.ebean.EbeanServer;
+import nu.nerd.BukkitEbean.EbeanBuilder;
+import nu.nerd.BukkitEbean.EbeanHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -23,6 +26,8 @@ import com.michaelelin.Barnyard.commands.*;
 public class BarnyardPlugin extends JavaPlugin {
 
     public static final Logger log = Logger.getLogger("Minecraft");
+
+    private EbeanServer db;
 
     public int MAXIMUM_PETS;
     public List<EntityType> ALLOWED_TYPES;
@@ -102,16 +107,20 @@ public class BarnyardPlugin extends JavaPlugin {
         log.info("[Barnyard] " + getDescription().getVersion() + " disabled.");
     }
 
+    public EbeanServer getDatabase() {
+        return db;
+    }
+
     public void setupDatabase() {
+        db = new EbeanBuilder(this).setClasses(getDatabaseClasses()).build();
         try {
             getDatabase().find(PetData.class).findRowCount();
         } catch (PersistenceException e) {
             log.info("Installing " + getDescription().getName() + " database.");
-            installDDL();
+            EbeanHelper.installDDL(db);
         }
     }
 
-    @Override
     public List<Class<?>> getDatabaseClasses() {
         List<Class<?>> list = new ArrayList<Class<?>>();
         list.add(PetData.class);
