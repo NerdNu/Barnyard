@@ -7,3 +7,6 @@ bin
 
 .settings
 /classes/
+
+.idea/
+*.iml
