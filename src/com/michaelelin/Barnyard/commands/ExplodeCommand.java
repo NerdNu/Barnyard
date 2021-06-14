@@ -33,7 +33,7 @@ public class ExplodeCommand extends BarnyardCommand {
 
                 World world = victim.getWorld();
                 world.playSound(victim.getEyeLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
-                float health = (float) victim.getMaxHealth();
+                // float health = (float) victim.getMaxHealth();
                 world.spawnParticle(Particle.EXPLOSION_LARGE, victim.getEyeLocation(), 4, 1.0, 2.0, 1.0);
                 world.spawnParticle(Particle.BLOCK_DUST, victim.getEyeLocation(), 250, 0.2, 0.08, 0.2, 0.3,
                         new MaterialData(Material.REDSTONE_BLOCK));
